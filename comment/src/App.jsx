@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import axios from 'axios'
 
 let data=[]
@@ -17,7 +17,9 @@ const printPreOrder=(root,comments,depth)=>{
   }
 }
 const App =()=> {
+  const [loading,setLoading]=useState(false)
   useEffect(()=>{
+    setLoading(true)
     axios("http://localhost:3000/api/").then(({data})=>{
       return data.comments
     }).then(comments=>{
@@ -27,14 +29,24 @@ const App =()=> {
         }
       }),comments,0)
     })
+    setLoading(false)
   },[])
+
+  if(loading){
+    return(
+      <div>Loading</div>
+    )
+  }
   console.log(data)
+  const test=[1,2,3,4,5,6]
+  console.log(test)
+  const dataRender=data.map(each=>{
+    console.log(each)
+    return <div>{each}</div>
+  })
   return (
     <div>{
-      data.map(comment=>{
-        return<div>hello</div>
-      })
-    
+      dataRender
     }</div>
   )
 }
